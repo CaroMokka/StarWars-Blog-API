@@ -2,9 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-#TABLA USER
+#TABLA USER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
     user_name = db.Column(db.String(80), unique=True, nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
@@ -18,13 +19,14 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "user_id": self.user_id,
             "user_name": self.user_name,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
             # do not serialize the password, its a security breach
         }
-
+#TABLA CHARACTERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Characters(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
@@ -46,14 +48,14 @@ class Characters(db.Model):
         }    
 
 
-#TABLA PLANETAS
+#TABLA PLANETS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Planets(db.Model):  
     id = db.Column(db.Integer, primary_key=True) 
     name = db.Column(db.String(30), nullable=False)
-    diameter = db.Column(db.Integer)  
-    climate = db.Column(db.String(80))
-    terrain = db.Column(db.String(80))
-    population = db.Column(db.Integer)
+    diameter = db.Column(db.Integer, nullable=False)  
+    climate = db.Column(db.String(80), nullable=False)
+    terrain = db.Column(db.String(80), nullable=False)
+    population = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<Planets %r>' % self.name  
@@ -69,13 +71,13 @@ class Planets(db.Model):
             
         }  
 
-#TABLA NAVES
+#TABLA STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Starships(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
-    name = db.Column(db.String(30), nullable=False)
-    model = db.Column(db.String(80))
-    manufacturer = db.Column(db.String(80))
-    passengers = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, nullable=False)
+    model = db.Column(db.String(80), nullable=False)
+    manufacturer = db.Column(db.String(80), nullable=False)
+    passengers = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<Starships %r>' % self.name 
@@ -91,3 +93,34 @@ class Starships(db.Model):
             
         }    
          
+
+#TABLA FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class Favorites(db.Model):
+    id = db.Column(db.Integer, primary_key=True) 
+    user_id = db.Column(db.Integer, nullable=False)
+    character_id = db.Column(db.Integer, nullable=False)
+    planet_id = db.Column(db.Integer, nullable=False)
+    starship_id = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Favorites %r>' % self.user_id 
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_idr": self.user_id,
+            "character_id": self.character_id,
+            "planet_id": self.planet_id,
+            "starship_id": self.starship_id,
+            "quantity": self.quantity,
+ 
+            
+        }
+
+
+
+
+
+
+

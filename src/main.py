@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Characters, Planets, Starships
+from models import db, User, Characters, Planets, Starships, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -30,13 +30,25 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-#GET ALL USERS
+#GET ALL USERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @app.route('/user', methods=['GET'])
 def get_users():
     users = User.query.all()
     all_users = list(map(lambda x: x.serialize(), users))
 
     return jsonify(all_users), 200
+
+#GET A USER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/user/<int:id>', methods=['GET'])
+def get_a_user(id):
+    user = User.query.get(id)
+    print(id)
+    if user is None:
+       raise APIException('User not found', status_code=404)
+
+    return jsonify(user.serialize()), 200
+
+
 
 #POST USER
 @app.route('/user', methods=['POST'])
@@ -139,9 +151,88 @@ def get_characters():
 def create_character():
     request_body_characters = request.get_json()
     character = Characters(name=request_body_characters["name"], height=request_body_characters["height"], gender=request_body_characters["gender"], homeworld=request_body_characters["homeworld"])
-    db.session.add(planet)
+    db.session.add(character)
     db.session.commit() 
-    return jsonify("Planet successfully registered"), 200
+    return jsonify("Character successfully registered"), 200
+
+
+#PUT CHARACTER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/characters/<int:id>', methods=['PUT'])
+def update_character(id):
+    request_body_character = request.get_json()
+    char = Characters.query.get(id)
+    if char is None:
+       raise APIException('Character not found', status_code=404)
+
+    if "name" in request_body_character:
+        char.name = request_body_character["name"]
+    
+    db.session.commit()
+    
+    return jsonify("Character updated successfully"), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # this only runs if `$ python src/main.py` is executed
