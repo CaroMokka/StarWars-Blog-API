@@ -115,7 +115,7 @@ def update_planet(id):
 #DELETE PLANET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @app.route('/planets/<int:id>', methods=['DELETE'])
 def delete_planet(id):
-    planet = Planet.query.get(id)
+    planet = Planets.query.get(id)
     if planet is None:
        raise APIException('Planet not found', status_code=404)
     db.session.delete(planet)
@@ -125,7 +125,23 @@ def delete_planet(id):
     return jsonify("Deleted planet"), 200 
 
 
+#GET ALL CHARACTERS >>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/characters', methods=['GET'])
+def get_characters():
+    characters = Characters.query.all()
+    all_characters = list(map(lambda x: x.serialize(), characters))
+   
+    return jsonify(all_characters), 200    
 
+
+#POST CHARACTER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/characters', methods=['POST'])
+def create_character():
+    request_body_characters = request.get_json()
+    character = Characters(name=request_body_characters["name"], height=request_body_characters["height"], gender=request_body_characters["gender"], homeworld=request_body_characters["homeworld"])
+    db.session.add(planet)
+    db.session.commit() 
+    return jsonify("Planet successfully registered"), 200
 
 
 # this only runs if `$ python src/main.py` is executed
