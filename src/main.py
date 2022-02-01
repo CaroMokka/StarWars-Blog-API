@@ -171,17 +171,66 @@ def update_character(id):
     
     return jsonify("Character updated successfully"), 200
 
+#Delete CHARACTER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/characters/<int:id>', methods=['DELETE'])
+def delete_character(id):
+    character = Characters.query.get(id)
+    if character is None:
+       raise APIException('Character not found', status_code=404)
+    db.session.delete(character)
+    db.session.commit()
+  
+    
+    return jsonify("Deleted character"), 200
 
 
+#GET ALL STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/starships', methods=['GET'])
+def get_starships():
+    starships = Starships.query.all()
+    all_starships = list(map(lambda x: x.serialize(), starships))
+   
+    return jsonify(all_starships), 200
+
+#POST STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/starships', methods=['POST'])
+def create_starship():
+    request_body_starships = request.get_json()
+    starship = Starships(name=request_body_starships["name"], model=request_body_starships["model"], manufacturer=request_body_starships["manufacturer"], passengers=request_body_starships["passengers"])
+    db.session.add(starship)
+    db.session.commit() 
+    return jsonify("Starship successfully registered"), 200
+
+#PUT STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/starships/<int:id>', methods=['PUT'])
+def update_starship(id):
+    request_body_starships = request.get_json() #Obtengo los datos nuevo en un json
+
+    starship = Starships.query.get(id) #valor actual
+
+    if starship is None:
+       raise APIException('Starship not found', status_code=404)
+
+    if "name" in request_body_starships:
+        starship.name = request_body_starships["name"] #valor nuevo
+        
+    
+    db.session.commit()
+    
+    return jsonify("Starship updated successfully"), 200
 
 
-
-
-
-
-
-
-
+#DELETE STARSHIP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/starships/<int:id>', methods=['DELETE'])
+def delete_starship(id):
+    starship = Starships.query.get(id)
+    if starship is None:
+       raise APIException('Starship not found', status_code=404)
+    db.session.delete(starship)
+    db.session.commit()
+  
+    
+    return jsonify("Deleted starship"), 200
 
 
 

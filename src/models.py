@@ -74,7 +74,7 @@ class Planets(db.Model):
 #TABLA STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Starships(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
-    user_id = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(30), nullable=False)
     model = db.Column(db.String(80), nullable=False)
     manufacturer = db.Column(db.String(80), nullable=False)
     passengers = db.Column(db.Integer, nullable=False)
@@ -88,7 +88,7 @@ class Starships(db.Model):
             "name": self.name,
             "model": self.model,
             "manufacturer": self.manufacturer,
-            "passangers": self.passangers,
+            "passengers": self.passengers
  
             
         }    
