@@ -195,8 +195,8 @@ def get_starships():
 #POST STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @app.route('/starships', methods=['POST'])
 def create_starship():
-    request_body_starships = request.get_json()
-    starship = Starships(name=request_body_starships["name"], model=request_body_starships["model"], manufacturer=request_body_starships["manufacturer"], passengers=request_body_starships["passengers"])
+    request_body_starships = request.get_json() #recibes request
+    starship = Starships(name=request_body_starships["name"], model=request_body_starships["model"], manufacturer=request_body_starships["manufacturer"], passengers=request_body_starships["passengers"]) #remplaza los datos de los campos
     db.session.add(starship)
     db.session.commit() 
     return jsonify("Starship successfully registered"), 200
@@ -230,8 +230,29 @@ def delete_starship(id):
     db.session.commit()
   
     
-    return jsonify("Deleted starship"), 200
+    return jsonify({"msg":"Deleted starship"}), 200
 
+#Get FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/favorites', methods=['GET'])
+def get_favorites():
+    favorites = Favorites.query.all()
+    all_favorites = list(map(lambda x: x.serialize(), favorites))
+   
+    return jsonify(all_favorites), 200
+
+
+
+#POST FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+""" @app.route('/favorites', methods=['POST'])
+def add_to_favorite():
+    request_body_fav = request.get_json()
+    favorite = Favorites(user_id=request_body_fav["user_id"], character_id=request_body_fav["character_id"], planet_id=request_body_fav["planet_id"], starship_id=request_body_fav["starship_id"])
+    db.session.add(favorite)
+    db.session.commit()
+    return jsonify({"msg": "Favorite successfully created"}), 200 """
+
+    
+            
 
 
 

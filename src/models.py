@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True, default=True)
+    fav_user = db.relationship('Favorites', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.user_name
@@ -33,6 +34,7 @@ class Characters(db.Model):
     height = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(30), nullable=False)
     homeworld = db.Column(db.String(30), nullable=False)
+    fav_characters = db.relationship('Favorites', lazy=True)
 
     def __repr__(self):
         return '<Characters %r>' % self.name
@@ -56,6 +58,7 @@ class Planets(db.Model):
     climate = db.Column(db.String(80), nullable=False)
     terrain = db.Column(db.String(80), nullable=False)
     population = db.Column(db.Integer, nullable=False)
+    fav_planets = db.relationship('Favorites', lazy=True)
 
     def __repr__(self):
         return '<Planets %r>' % self.name  
@@ -78,6 +81,7 @@ class Starships(db.Model):
     model = db.Column(db.String(80), nullable=False)
     manufacturer = db.Column(db.String(80), nullable=False)
     passengers = db.Column(db.Integer, nullable=False)
+    fav_starships = db.relationship('Favorites', lazy=True)
 
     def __repr__(self):
         return '<Starships %r>' % self.name 
@@ -97,11 +101,14 @@ class Starships(db.Model):
 #TABLA FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
-    user_id = db.Column(db.Integer, nullable=False)
-    character_id = db.Column(db.Integer, nullable=False)
-    planet_id = db.Column(db.Integer, nullable=False)
-    starship_id = db.Column(db.Integer, nullable=False)
-    quantity = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
+    starship_id = db.Column(db.Integer, db.ForeignKey('starships.id'))
+ 
+    
+
+  
 
     def __repr__(self):
         return '<Favorites %r>' % self.user_id 
@@ -109,11 +116,11 @@ class Favorites(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user_idr": self.user_id,
+            "user_id": self.user_id,
             "character_id": self.character_id,
             "planet_id": self.planet_id,
             "starship_id": self.starship_id,
-            "quantity": self.quantity,
+           
  
             
         }
