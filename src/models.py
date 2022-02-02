@@ -12,12 +12,9 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True, default=True)
-    favorites = db.relationship('Favorites', backref='user', lazy=True)
    
-    
-
     def __repr__(self):
-        return '<User %r>' % self.user_id
+        return '<User %r>' % self.user_id 
 
     def serialize(self):
         return {
@@ -29,6 +26,7 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+
 #TABLA CHARACTERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Characters(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,7 +34,6 @@ class Characters(db.Model):
     height = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(30), nullable=False)
     homeworld = db.Column(db.String(30), nullable=False)
-    fav_character = db.relationship('Favorites', backref='characters', lazy=True)
 
     def __repr__(self):
         return '<Characters %r>' % self.name
@@ -49,7 +46,10 @@ class Characters(db.Model):
             "gender": self.gender,
             "homeworld": self.homeworld,
             # do not serialize the password, its a security breach
-        }    
+        }  
+
+      
+
 
 
 #TABLA PLANETS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -60,7 +60,7 @@ class Planets(db.Model):
     climate = db.Column(db.String(80), nullable=False)
     terrain = db.Column(db.String(80), nullable=False)
     population = db.Column(db.Integer, nullable=False)
-    fav_planets = db.relationship('Favorites', backref='planets', lazy=True)
+
 
     def __repr__(self):
         return '<Planets %r>' % self.name  
@@ -74,7 +74,9 @@ class Planets(db.Model):
             "terrain": self.terrain,
             "population": self.population
             
-        }  
+        } 
+
+         
 
 #TABLA STARSHIPS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class Starships(db.Model):
@@ -83,7 +85,7 @@ class Starships(db.Model):
     model = db.Column(db.String(80), nullable=False)
     manufacturer = db.Column(db.String(80), nullable=False)
     passengers = db.Column(db.Integer, nullable=False)
-    fav_starships = db.relationship('Favorites', backref='starships', lazy=True)
+    
 
     def __repr__(self):
         return '<Starships %r>' % self.name 
@@ -97,16 +99,23 @@ class Starships(db.Model):
             "passengers": self.passengers
  
             
-        }    
+        }   
+
+
+         
          
 
-#TABLA FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#TABLA FAVORITES PARENT>>>>>>>>>>>>>>>>>>RELATION DE MUCHOS A uno>>>>>>>>>>>>>>>>>>>>
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
     starship_id = db.Column(db.Integer, db.ForeignKey('starships.id'))
+    user = db.relationship("User", backref="favorites", lazy=True)
+    character = db.relationship("Characters", backref="favorites", lazy=True)
+    planets = db.relationship("Planets", backref="favorites", lazy=True)
+    starships = db.relationship("Starships", backref="favorites", lazy=True)
  
     
 
