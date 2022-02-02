@@ -241,13 +241,16 @@ def get_favorites():
     return jsonify(all_favorites), 200
 
 #POST FAVORITES opcion 1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-@app.route('/favorites', methods=['POST'])
+""" @app.route('/favorites', methods=['POST'])
 def add_to_favorite():
     request_body_fav = request.get_json()
     print(request_body_fav)
-    #user = request_body_fav["user_id"]
-    #print(user)
+    user = request_body_fav["user_id"]
+    char = request_body_fav["character_id"]
+    print(user, char)
     fav_user = Favorites(user_id=request_body_fav["user_id"])
+    fav_character = Favorites(character_id=request_body_fav["character_id"])
+    print(fav_user, fav_character)
   
     db.session.add(fav_user)
     db.session.commit()
@@ -255,16 +258,30 @@ def add_to_favorite():
     
     
 
-    return jsonify("ok"), 200
+    return jsonify("ok"), 200 """
 
 #POST FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-""" @app.route('/favorites', methods=['POST'])
+@app.route('/favorites', methods=['POST'])
 def add_to_favorite():
     request_body_fav = request.get_json()
-    favorite = Favorites(user_id=request_body_fav["user_id"], character_id=request_body_fav["character_id"], planet_id=request_body_fav["planet_id"], starship_id=request_body_fav["starship_id"])
-    db.session.add(favorite)
+    print(request_body_fav)
+    fav_user_id = request_body_fav["user_id"]
+    fav_character_id = request_body_fav["character_id"]
+    fav_planet_id = request_body_fav["planet_id"]
+    fav_starship_id = request_body_fav["starship_id"]
+
+    fav_record = Favorites.query.filter_by(user_id="user_id", character_id="character_id", planet_id="planet_id", starship_id="starship_id").first()
+    print(fav_record)
+    if fav_record is None:
+        fav_record = Favorites(user_id="user_id",character_id="character_id", planet_id="planet_id", starship_id="starship_id")
+        db.session.add(fav_record)
+        
+    else:    
+        return jsonify("No hay nada para agragar a favs")
+
+    #record_favorite = Favorites(user_id=request_body_fav["user_id"], character_id=request_body_fav["character_id"], planet_id=request_body_fav["planet_id"], starship_id=request_body_fav["starship_id"])
     db.session.commit()
-    return jsonify({"msg": "Favorite successfully created"}), 200 """
+    return jsonify({"msg": "Favorite successfully created"}), 200
 
     
             
