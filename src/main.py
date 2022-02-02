@@ -260,7 +260,7 @@ def add_to_favorite():
 
     return jsonify("ok"), 200
 
-#POST FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#POST FAVORITES op2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 """ @app.route('/favorites', methods=['POST'])
 def add_to_favorite():
     request_body_fav = request.get_json()
