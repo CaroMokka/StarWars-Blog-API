@@ -5,14 +5,15 @@ db = SQLAlchemy()
 #TABLA USER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer)
     user_name = db.Column(db.String(80), unique=True, nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True, default=True)
-    fav_user = db.relationship('Favorites', lazy=True)
+    fav_user = db.relationship('Favorites', backref='user')
+    
 
     def __repr__(self):
         return '<User %r>' % self.user_name
@@ -34,7 +35,7 @@ class Characters(db.Model):
     height = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(30), nullable=False)
     homeworld = db.Column(db.String(30), nullable=False)
-    fav_characters = db.relationship('Favorites', lazy=True)
+    fav_character = db.relationship('Favorites', backref='characters')
 
     def __repr__(self):
         return '<Characters %r>' % self.name
@@ -58,7 +59,7 @@ class Planets(db.Model):
     climate = db.Column(db.String(80), nullable=False)
     terrain = db.Column(db.String(80), nullable=False)
     population = db.Column(db.Integer, nullable=False)
-    fav_planets = db.relationship('Favorites', lazy=True)
+    fav_planets = db.relationship('Favorites', backref='planets')
 
     def __repr__(self):
         return '<Planets %r>' % self.name  
@@ -81,7 +82,7 @@ class Starships(db.Model):
     model = db.Column(db.String(80), nullable=False)
     manufacturer = db.Column(db.String(80), nullable=False)
     passengers = db.Column(db.Integer, nullable=False)
-    fav_starships = db.relationship('Favorites', lazy=True)
+    fav_starships = db.relationship('Favorites', backref='starships')
 
     def __repr__(self):
         return '<Starships %r>' % self.name 

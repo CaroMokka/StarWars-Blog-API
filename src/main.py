@@ -240,7 +240,22 @@ def get_favorites():
    
     return jsonify(all_favorites), 200
 
+#POST FAVORITES opcion 1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/favorites', methods=['POST'])
+def add_to_favorite():
+    request_body_fav = request.get_json()
+    print(request_body_fav)
+    #user = request_body_fav["user_id"]
+    #print(user)
+    fav_user = Favorites(user_id=request_body_fav["user_id"])
+  
+    db.session.add(fav_user)
+    db.session.commit()
+    print(fav_user.user)
+    
+    
 
+    return jsonify("ok"), 200
 
 #POST FAVORITES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 """ @app.route('/favorites', methods=['POST'])
@@ -253,7 +268,15 @@ def add_to_favorite():
 
     
             
-
+""" @app.route("/favorites", methods=["POST"])
+def add_favorites():
+    nfavorite = Favorites()
+    nfavorite.planets_id = request.json['planet_id']
+    nfavorite.characters_id = request.json['character_id']
+    nfavorite.user_id  = request.json['user_id']
+    db.session.add(nfavorite)
+    db.session.commit()
+    return jsonify({"msg": "Favorite successfully created"}), 200 """
 
 
 
